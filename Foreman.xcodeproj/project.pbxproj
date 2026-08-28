@@ -6,13 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C40AECDA303E5FF500DC6337 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C40AECD9303E5FF500DC6337 /* FirebaseFirestore */; };
+		C40AECDC303E600300DC6337 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C40AECDB303E600300DC6337 /* FirebaseAuth */; };
+		C40AED5A3040F2AB00DC6337 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C40AED593040F2AB00DC6337 /* FirebaseMessaging */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C45EB4E0303E4DAF00B4B08A /* Foreman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Foreman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C40AED573040F10B00DC6337 /* Exceptions for "Foreman" folder in "Foreman" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C45EB4DF303E4DAF00B4B08A /* Foreman */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C45EB4E2303E4DAF00B4B08A /* Foreman */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C40AED573040F10B00DC6337 /* Exceptions for "Foreman" folder in "Foreman" target */,
+			);
 			path = Foreman;
 			sourceTree = "<group>";
 		};
@@ -23,16 +42,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C40AED5A3040F2AB00DC6337 /* FirebaseMessaging in Frameworks */,
+				C40AECDA303E5FF500DC6337 /* FirebaseFirestore in Frameworks */,
+				C40AECDC303E600300DC6337 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C40AED583040F2AB00DC6337 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C45EB4D7303E4DAF00B4B08A = {
 			isa = PBXGroup;
 			children = (
 				C45EB4E2303E4DAF00B4B08A /* Foreman */,
+				C40AED583040F2AB00DC6337 /* Frameworks */,
 				C45EB4E1303E4DAF00B4B08A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +95,9 @@
 			);
 			name = Foreman;
 			packageProductDependencies = (
+				C40AECD9303E5FF500DC6337 /* FirebaseFirestore */,
+				C40AECDB303E600300DC6337 /* FirebaseAuth */,
+				C40AED593040F2AB00DC6337 /* FirebaseMessaging */,
 			);
 			productName = Foreman;
 			productReference = C45EB4E0303E4DAF00B4B08A /* Foreman.app */;
@@ -94,6 +127,9 @@
 			);
 			mainGroup = C45EB4D7303E4DAF00B4B08A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C45EB536303E593800B4B08A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C45EB4E1303E4DAF00B4B08A /* Products */;
 			projectDirPath = "";
@@ -244,12 +280,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Foreman/Foreman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 566SQ3YW6M;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Foreman/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -286,12 +325,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Foreman/Foreman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 566SQ3YW6M;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Foreman/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -345,6 +387,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C45EB536303E593800B4B08A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C40AECD9303E5FF500DC6337 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C45EB536303E593800B4B08A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		C40AECDB303E600300DC6337 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C45EB536303E593800B4B08A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		C40AED593040F2AB00DC6337 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C45EB536303E593800B4B08A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C45EB4D8303E4DAF00B4B08A /* Project object */;
 }
