@@ -8,6 +8,9 @@ struct ScheduleView: View {
 
     private var isAdmin: Bool { authVM.currentUser?.role == .admin }
 
+    /// Below this the week scrolls horizontally; at or above it all seven days fill the width.
+    private let minColumnWidth: CGFloat = 150
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -31,17 +34,27 @@ struct ScheduleView: View {
             }
             .padding()
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 10) {
-                    ForEach(Array(zip(weekdays, vm.weekDates)), id: \.0) { day, date in
-                        dayColumn(day: day, date: date)
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 24)
-            }
+            GeometryReader { geo in
+                let columnSpacing: CGFloat = 10
+                let sidePadding: CGFloat = 16
+                let bottomPadding: CGFloat = 12
+                let fitWidth = (geo.size.width - sidePadding * 2
+                                - columnSpacing * CGFloat(weekdays.count - 1)) / CGFloat(weekdays.count)
+                let columnWidth = max(fitWidth, minColumnWidth)
+                let columnHeight = max(geo.size.height - bottomPadding, 0)
 
-            Spacer(minLength: 0)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(alignment: .top, spacing: columnSpacing) {
+                        ForEach(Array(zip(weekdays, vm.weekDates)), id: \.0) { day, date in
+                            dayColumn(day: day, date: date)
+                                .frame(width: columnWidth, height: columnHeight)
+                        }
+                    }
+                    .padding(.horizontal, sidePadding)
+                    .padding(.bottom, bottomPadding)
+                }
+                .scrollDisabled(fitWidth >= minColumnWidth)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.foremanPaper.ignoresSafeArea())
@@ -70,25 +83,31 @@ struct ScheduleView: View {
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(.foremanSteel)
 
-            let dayShifts = vm.shifts(for: day)
-            if dayShifts.isEmpty {
-                Text("No shifts posted.")
-                    .font(.system(size: 11.5))
-                    .italic()
-                    .foregroundColor(.foremanSteel)
-            } else {
-                ForEach(dayShifts) { shift in
-                    shiftRow(shift)
-                }
-            }
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 8) {
+                    let dayShifts = vm.shifts(for: day)
+                    if dayShifts.isEmpty {
+                        Text("No shifts posted.")
+                            .font(.system(size: 11.5))
+                            .italic()
+                            .foregroundColor(.foremanSteel)
+                    } else {
+                        ForEach(dayShifts) { shift in
+                            shiftRow(shift)
+                        }
+                    }
 
-            let dayTasks = tasksFor(day)
-            if !dayTasks.isEmpty {
-                Divider().padding(.vertical, 2)
-                ForEach(dayTasks) { task in
-                    taskChip(task)
+                    let dayTasks = tasksFor(day)
+                    if !dayTasks.isEmpty {
+                        Divider().padding(.vertical, 2)
+                        ForEach(dayTasks) { task in
+                            taskChip(task)
+                        }
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(maxHeight: .infinity, alignment: .top)
 
             if isAdmin {
                 Button {
@@ -101,7 +120,7 @@ struct ScheduleView: View {
             }
         }
         .padding(10)
-        .frame(width: 150, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.foremanPaperDim)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.foremanInk.opacity(0.14), lineWidth: 1.5))
         .cornerRadius(5)
