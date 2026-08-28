@@ -4,27 +4,45 @@ struct MainTabView: View {
     @EnvironmentObject var authVM: AuthViewModel
 
     var body: some View {
-        NavigationView {
-            TabView {
+        TabView {
+            NavigationStack {
                 ScheduleView()
-                    .tabItem { Label("This Week", systemImage: "calendar") }
-                TodoListView()
-                    .tabItem { Label("To-Do List", systemImage: "checklist") }
+                    .navigationTitle("This Week")
+                    .navigationBarTitleDisplayMode(.large)
+                    .toolbar { accountMenu }
+                    .toolbarBackground(Color.foremanPaper, for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
             }
-            .navigationTitle("Foreman")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        if let user = authVM.currentUser {
-                            Text("\(user.name) · \(user.role.rawValue.uppercased())")
-                        }
-                        Button("Punch Out", role: .destructive) { authVM.signOut() }
-                    } label: {
-                        Image(systemName: "person.crop.circle")
-                    }
+            .tabItem { Label("This Week", systemImage: "calendar") }
+
+            NavigationStack {
+                TodoListView()
+                    .navigationTitle("The List")
+                    .navigationBarTitleDisplayMode(.large)
+                    .toolbar { accountMenu }
+                    .toolbarBackground(Color.foremanPaper, for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
+            }
+            .tabItem { Label("To-Do List", systemImage: "checklist") }
+        }
+        .tint(.foremanInk)
+        .toolbarBackground(Color.foremanPaper, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+    }
+
+    @ToolbarContentBuilder
+    private var accountMenu: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Menu {
+                if let user = authVM.currentUser {
+                    Text("\(user.name) · \(user.role.rawValue.uppercased())")
                 }
+                Link("Privacy Policy", destination: URL(string: "https://wordpress-ab119.web.app/privacy.html")!)
+                Link("Support", destination: URL(string: "https://wordpress-ab119.web.app/support.html")!)
+                Button("Punch Out", role: .destructive) { authVM.signOut() }
+            } label: {
+                Image(systemName: "person.crop.circle")
             }
         }
-        .accentColor(.foremanInk)
     }
 }

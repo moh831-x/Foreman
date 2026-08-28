@@ -25,5 +25,6 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut, value: authVM.isSignedIn)
+        .preferredColorScheme(.light)
     }
 }

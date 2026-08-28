@@ -3,6 +3,7 @@ import SwiftUI
 struct ScheduleView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @StateObject private var vm = ScheduleViewModel()
+    @StateObject private var todoVM = TodoViewModel()
     @State private var addingShiftForDay: String?
 
     private var isAdmin: Bool { authVM.currentUser?.role == .admin }
@@ -39,15 +40,25 @@ struct ScheduleView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 24)
             }
+
+            Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.foremanPaper.ignoresSafeArea())
-        .onAppear { vm.subscribe() }
+        .onAppear {
+            vm.subscribe()
+            todoVM.subscribe()
+        }
         .sheet(item: $addingShiftForDay) { day in
             AddShiftSheet(day: day) { employee, start, end in
                 vm.addShift(day: day, employeeName: employee, start: start, end: end,
                             createdBy: authVM.currentUser?.email ?? "")
             }
         }
+    }
+
+    private func tasksFor(_ day: String) -> [TodoItem] {
+        todoVM.todos.filter { $0.dueDay == day && ($0.week == nil || $0.week == vm.weekId) }
     }
 
     private func dayColumn(day: String, date: Date) -> some View {
@@ -68,6 +79,14 @@ struct ScheduleView: View {
             } else {
                 ForEach(dayShifts) { shift in
                     shiftRow(shift)
+                }
+            }
+
+            let dayTasks = tasksFor(day)
+            if !dayTasks.isEmpty {
+                Divider().padding(.vertical, 2)
+                ForEach(dayTasks) { task in
+                    taskChip(task)
                 }
             }
 
@@ -113,9 +132,22 @@ struct ScheduleView: View {
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.foremanInk, lineWidth: 1.5))
         .cornerRadius(4)
     }
+
+    private func taskChip(_ task: TodoItem) -> some View {
+        Text(task.text)
+            .font(.system(size: 11.5))
+            .strikethrough(task.done)
+            .foregroundColor(task.done ? .foremanSteel : .foremanInk)
+            .padding(.vertical, 4)
+            .padding(.horizontal, 6)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.foremanAmber.opacity(0.16))
+            .overlay(Rectangle().fill(Color.foremanAmber).frame(width: 3), alignment: .leading)
+            .cornerRadius(2)
+    }
 }
 
-extension String: @retroactive Identifiable {
+extension String: Identifiable {
     public var id: String { self }
 }
 
