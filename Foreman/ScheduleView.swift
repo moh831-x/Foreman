@@ -4,7 +4,7 @@ struct ScheduleView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @StateObject private var vm = ScheduleViewModel()
     @StateObject private var todoVM = TodoViewModel()
-    @State private var addingShiftForDay: String?
+    @State private var addingShiftForDay: DaySelection?
 
     private var isAdmin: Bool { authVM.currentUser?.role == .admin }
 
@@ -49,9 +49,9 @@ struct ScheduleView: View {
             vm.subscribe()
             todoVM.subscribe()
         }
-        .sheet(item: $addingShiftForDay) { day in
-            AddShiftSheet(day: day) { employee, start, end in
-                vm.addShift(day: day, employeeName: employee, start: start, end: end,
+        .sheet(item: $addingShiftForDay) { selection in
+            AddShiftSheet(day: selection.day) { employee, start, end in
+                vm.addShift(day: selection.day, employeeName: employee, start: start, end: end,
                             createdBy: authVM.currentUser?.email ?? "")
             }
         }
@@ -92,7 +92,7 @@ struct ScheduleView: View {
 
             if isAdmin {
                 Button {
-                    addingShiftForDay = day
+                    addingShiftForDay = DaySelection(day: day)
                 } label: {
                     Text("+ Shift").frame(maxWidth: .infinity)
                 }
@@ -147,8 +147,11 @@ struct ScheduleView: View {
     }
 }
 
-extension String: Identifiable {
-    public var id: String { self }
+/// Wraps a weekday name so it can drive `.sheet(item:)` without making
+/// `String` itself `Identifiable` across the whole module.
+private struct DaySelection: Identifiable {
+    let day: String
+    var id: String { day }
 }
 
 struct AddShiftSheet: View {
