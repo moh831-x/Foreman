@@ -29,6 +29,17 @@ final class TodoViewModel: ObservableObject {
         db.collection("todos").document(id).updateData(["done": !item.done])
     }
 
+    func update(_ item: TodoItem, text: String, dueDay: String?) {
+        guard let id = item.id else { return }
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        let dueValue: Any = dueDay.map { $0 as Any } ?? NSNull()
+        db.collection("todos").document(id).updateData([
+            "text": trimmed,
+            "dueDay": dueValue
+        ])
+    }
+
     func delete(_ item: TodoItem) {
         guard let id = item.id else { return }
         db.collection("todos").document(id).delete()
